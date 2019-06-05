@@ -24,6 +24,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"mime"
 	"net/http"
 	"net/http/httputil"
@@ -35,6 +36,7 @@ import (
 	"github.com/go-openapi/runtime/logger"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/strfmt"
+	"github.com/kr/pretty"
 )
 
 // TLSClientOptions to configure client authentication with mutual TLS
@@ -244,6 +246,7 @@ func NewWithClient(host, basePath string, schemes []string, client *http.Client)
 		rt.clientOnce.Do(func() {
 			rt.client = client
 		})
+		rt.clientOnce = new(sync.Once)
 	}
 	return rt
 }
@@ -308,6 +311,7 @@ func (r *Runtime) EnableConnectionReuse() {
 // Submit a request and when there is a body on success it will turn that into the result
 // all other things are turned into an api error for swagger which retains the status code
 func (r *Runtime) Submit(operation *runtime.ClientOperation) (interface{}, error) {
+	log.Printf("[DEBUG] Calling Runtime.Submit with operation: %#v", operation)
 	params, readResponse, auth := operation.Params, operation.Reader, operation.AuthInfo
 
 	request, err := newRequest(operation.Method, operation.PathPattern, params)
@@ -351,12 +355,15 @@ func (r *Runtime) Submit(operation *runtime.ClientOperation) (interface{}, error
 	req.URL.Scheme = r.pickScheme(operation.Schemes)
 	req.URL.Host = r.Host
 
+	log.Printf("[DEBUG] Will set client in clientOnce: %#v", r.clientOnce)
 	r.clientOnce.Do(func() {
+		log.Printf("[DEBUG] Setting client with transport: %#v", r.Transport)
 		r.client = &http.Client{
 			Transport: r.Transport,
 			Jar:       r.Jar,
 		}
 	})
+	log.Printf("[DEBUG] r.Client.Transport is %#v", r.client.Transport)
 
 	if r.Debug {
 		b, err2 := httputil.DumpRequestOut(req, true)
@@ -386,10 +393,14 @@ func (r *Runtime) Submit(operation *runtime.ClientOperation) (interface{}, error
 	defer cancel()
 
 	client := operation.Client
+
+	log.Printf("[DEBUG] operation client transport: %#v", client.Transport)
 	if client == nil {
+		log.Println("[DEBUG] Setting client because operation.Client is empty")
 		client = r.client
 	}
 	req = req.WithContext(ctx)
+	log.Printf("[DEBUG] Executing request with transport: %s", pretty.Sprint(client.Transport))
 	res, err := client.Do(req) // make requests, by default follows 10 redirects before failing
 	if err != nil {
 		return nil, err

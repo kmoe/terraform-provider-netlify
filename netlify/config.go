@@ -39,7 +39,7 @@ func (c *Config) Client() (interface{}, error) {
 	client := openapiClient.NewWithClient(
 		u.Host, u.Path, []string{u.Scheme},
 		cleanhttp.DefaultClient())
-	client.Transport = logging.NewTransport("Netlify", client.Transport)
+	client.Transport = logging.NewTransport("KATY LOGGING TRANSPORT Netlify", client.Transport)
 
 	// Setup our auth
 	authInfo := runtime.ClientAuthInfoWriterFunc(func(r runtime.ClientRequest, _ strfmt.Registry) error {

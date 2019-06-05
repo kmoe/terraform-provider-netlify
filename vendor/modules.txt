@@ -89,7 +89,7 @@ github.com/go-openapi/jsonpointer
 github.com/go-openapi/jsonreference
 # github.com/go-openapi/loads v0.19.0
 github.com/go-openapi/loads
-# github.com/go-openapi/runtime v0.19.0
+# github.com/go-openapi/runtime v0.19.0 => ../../go-openapi/runtime
 github.com/go-openapi/runtime
 github.com/go-openapi/runtime/client
 github.com/go-openapi/runtime/logger
@@ -201,6 +201,10 @@ github.com/hashicorp/yamux
 github.com/jmespath/go-jmespath
 # github.com/konsorten/go-windows-terminal-sequences v1.0.2
 github.com/konsorten/go-windows-terminal-sequences
+# github.com/kr/pretty v0.1.0
+github.com/kr/pretty
+# github.com/kr/text v0.1.0
+github.com/kr/text
 # github.com/mailru/easyjson v0.0.0-20190403194419-1ea4449da983
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
@@ -225,7 +229,7 @@ github.com/mitchellh/hashstructure
 github.com/mitchellh/mapstructure
 # github.com/mitchellh/reflectwalk v1.0.0
 github.com/mitchellh/reflectwalk
-# github.com/netlify/open-api v0.11.4
+# github.com/netlify/open-api v0.11.4 => ../../netlify/open-api
 github.com/netlify/open-api/go/models
 github.com/netlify/open-api/go/plumbing/operations
 github.com/netlify/open-api/go/porcelain

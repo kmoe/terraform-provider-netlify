@@ -51,3 +51,7 @@ require (
 	google.golang.org/genproto v0.0.0-20190515210553-995ef27e003f // indirect
 	gopkg.in/ini.v1 v1.42.0 // indirect
 )
+
+replace github.com/go-openapi/runtime => ../../go-openapi/runtime
+
+replace github.com/netlify/open-api => ../../netlify/open-api

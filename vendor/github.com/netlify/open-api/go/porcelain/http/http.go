@@ -2,6 +2,7 @@ package http
 
 import (
 	"crypto/tls"
+	"fmt"
 	"net"
 	"net/http"
 	"strconv"
@@ -31,11 +32,14 @@ func NewRetryableTransport(tr runtime.ClientTransport, attempts int) *RetryableT
 }
 
 func (t *RetryableTransport) Submit(op *runtime.ClientOperation) (interface{}, error) {
+	fmt.Println("[KATY] Netlify submit is happening")
 	client := op.Client
+	fmt.Printf("%+v", client)
 
 	if client == nil {
 		client = http.DefaultClient
 	}
+	fmt.Printf("%+v", client)
 
 	transport := client.Transport
 	if transport == nil {
@@ -57,6 +61,7 @@ func (t *RetryableTransport) Submit(op *runtime.ClientOperation) (interface{}, e
 }
 
 func (t *retryableRoundTripper) RoundTrip(req *http.Request) (resp *http.Response, err error) {
+	fmt.Println("[KATY] Netlify retryable round trip is happening")
 	rr := autorest.NewRetriableRequest(req)
 
 	for attempt := 0; attempt < t.attempts; attempt++ {
